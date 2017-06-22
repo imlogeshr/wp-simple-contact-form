@@ -86,3 +86,18 @@ function wpscf_deliver_mail() {
 	}
 
 }
+
+/**
+ * Create shortcode to display form and email message upon submit
+ * 
+ * @return string HTML form
+ */
+function wpscf_shortcode() {
+	ob_start();
+	wpscf_deliver_email();
+	wpscf_html_form_code();
+
+	return ob_get_clean();
+}
+
+add_shortcode('wp_simple_contact_form', 'wpscf_shortcode');
