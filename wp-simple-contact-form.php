@@ -2,7 +2,7 @@
 /*
 Plugin Name: WP Simple Contact Form
 Plugin URI:  https://github.com/qriouslad/wp-simple-contact-form
-Description: Simple contact form plugin. From display via shortcode.
+Description: Simple contact form plugin. Form display is done via a shortcode.
 Version:     1.0
 Author:      Bowo
 Author URI:  https://bowo.io
@@ -23,3 +23,32 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with {Plugin Name}. If not, see {License URI}.
 */
+
+/**
+ * Create contact form HTML
+ *
+ * @return string Raw HTML
+ */
+function wpscf_html_form_code() {
+	$html = '<form action="' . esc_url( $_SERVER['REQUEST_URI'] ) . '" method="post">';
+	$html .= '<p>';
+	$html .= 'Your Name (required)<br />';
+	$html .= '<input type="text" name="wpscf-name" pattern="[a-zA-Z0-9]+" value="' . ( isset( $_POST["wpscf-name"]) ? esc_attr( $_POST["wpscf-name"] ) : '') . '" size="40" />';
+	$html .= '</p>';
+	$html .= '<p>';
+	$html .= 'Your Email (required) <br />';
+	$html .= '<input type="email" name="wpscf-email" value="' . ( isset( $_POST["wpscf-email"] ) ? esc_attr( $_POST["wpscf-email"] ) : '') . '" size="40" />';
+	$html .= '</p>';
+	$html .= '<p>';
+	$html .= 'Subject (required) <br />';
+	$html .= '<input type="text" name="wpscf-subject" pattern="[a-zA-Z ]+" value="' . ( isset( $_POST["wpscf-subject"] ) ? esc_attr( $_POST["wpscf-subject"] ) : '' ) . '" size="40" />';
+	$html .= '</p>';
+	$html .= '<p>';
+	$html .= 'Your Message (required) <br />';
+	$html .= '<textarea rows="10" cols="35" name="wpscf-message">' . ( isset( $_POST["wpscf-message"] ) ? esc_attr( $_POST["wpscf-message"] ) : '' ) . '</textarea>';
+	$html .= '</p>';
+	$html .= '<p><input type="submit" name="wpscf-submitted" value="Send" /></p>';
+	$html .= '</form>';
+
+	echo $html;
+}
