@@ -24,6 +24,21 @@ You should have received a copy of the GNU General Public License
 along with {Plugin Name}. If not, see {License URI}.
 */
 
+function wpscf_activation() {
+
+}
+register_activation_hook(__FILE__, 'wpscf_activation');
+
+function wpscf_deactivation() {
+
+}
+register_deactivation_hook(__FILE__, 'wpscf_deactivation');
+
+function wpscf_uninstall() {
+
+}
+register_uninstall_hook(__FILE__, 'wpscf_uninstall');
+
 /**
  * Create contact form HTML
  *
@@ -72,15 +87,15 @@ function wpscf_deliver_mail() {
 		// Get the site administrator's email address
 		$to = get_option( 'admin_email' );
 
-		$headers = 'From: $name <$email>' . '\r\n';
+		$headers = 'From: ' . $name . ' <' . $email . '>' . '\r\n';
 
 		// If email has been processed for sending, display a success message
-		if ( wp_mail($to, $subject, $message, $headers ) ) {
-			echo '<div';
+		if ( wp_mail( $to, $subject, $message, $headers ) ) {
+			echo '<div>';
 			echo '<p>Thanks for contacting. We will respond soon.</p>';
 			echo '</div>';
 		} else {
-			echo 'An unexpected error occured.';
+			echo '<p style="color:red;">An unexpected error occured.</p>';
 		}
 
 	}
@@ -94,7 +109,7 @@ function wpscf_deliver_mail() {
  */
 function wpscf_shortcode() {
 	ob_start();
-	wpscf_deliver_email();
+	wpscf_deliver_mail();
 	wpscf_html_form_code();
 
 	return ob_get_clean();
