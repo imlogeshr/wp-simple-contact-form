@@ -27,7 +27,7 @@ along with {Plugin Name}. If not, see {License URI}.
 /**
  * Create contact form HTML
  *
- * @return string Raw HTML
+ * @return string $html The raw HTML of contact form
  */
 function wpscf_html_form_code() {
 	$html = '<form action="' . esc_url( $_SERVER['REQUEST_URI'] ) . '" method="post">';
@@ -51,4 +51,38 @@ function wpscf_html_form_code() {
 	$html .= '</form>';
 
 	echo $html;
+}
+
+
+/**
+ * Deliver email containing message data
+ * 
+ */
+function wpscf_deliver_mail() {
+
+	// If the submit button is clicked, send the email
+	if ( isset( $_POST['wpscf-submitted'] ) ) {
+
+		// Sanitize form values
+		$name = sanitize_text_field( $_POST['wpscf-name'] );
+		$email = sanitize_email( $_POST['wpscf-email'] );
+		$subject = sanitize_text_field( $_POST['wpscf-subject'] );
+		$message = esc_textarea( $_POST['wpscf-message'] );
+
+		// Get the site administrator's email address
+		$to = get_option( 'admin_email' );
+
+		$headers = 'From: $name <$email>' . '\r\n';
+
+		// If email has been processed for sending, display a success message
+		if ( wp_mail($to, $subject, $message, $headers ) ) {
+			echo '<div';
+			echo '<p>Thanks for contacting. We will respond soon.</p>';
+			echo '</div>';
+		} else {
+			echo 'An unexpected error occured.';
+		}
+
+	}
+
 }
